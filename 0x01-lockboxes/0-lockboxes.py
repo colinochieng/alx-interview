@@ -5,10 +5,9 @@ Module challenge: You have n number of locked boxes in front of you.
     Each box is numbered sequentially from 0 to n - 1 and each box may
     contain keys to the other boxes.
 """
-from typing import List, Set
 
 
-def canUnlockAll(boxes: List[List[int]]) -> bool:
+def canUnlockAll(boxes: list[list[int]]) -> bool:
     """
     description: checks if all boxes in the array are
         likely to be opened.
@@ -28,10 +27,10 @@ def canUnlockAll(boxes: List[List[int]]) -> bool:
 
     # use sets to avoid duplicacy in keys if found
     # + in multiple boxes
-    availedKeys: Set = set(boxes[0])
-    trackAvailedKeys: Set = set()
-    stillLockedBoxes: Set = set()
-    openedBoxes: Set = {0}
+    availedKeys: set = set(boxes[0])
+    trackAvailedKeys: set = set()
+    stillLockedBoxes: set = set()
+    openedBoxes: set = {0}
 
     if len(boxes) == 2:
         if 1 in availedKeys:
