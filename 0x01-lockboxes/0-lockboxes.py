@@ -7,7 +7,7 @@ Module challenge: You have n number of locked boxes in front of you.
 """
 
 
-def canUnlockAll(boxes: list[list[int]]) -> bool:
+def canUnlockAll(boxes):
     """
     description: checks if all boxes in the array are
         likely to be opened.
@@ -27,10 +27,10 @@ def canUnlockAll(boxes: list[list[int]]) -> bool:
 
     # use sets to avoid duplicacy in keys if found
     # + in multiple boxes
-    availedKeys: set = set(boxes[0])
-    trackAvailedKeys: set = set()
-    stillLockedBoxes: set = set()
-    openedBoxes: set = {0}
+    availedKeys = set(boxes[0])
+    trackAvailedKeys = set()
+    stillLockedBoxes = set()
+    openedBoxes = {0}
 
     if len(boxes) == 2:
         if 1 in availedKeys:
