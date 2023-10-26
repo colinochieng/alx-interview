@@ -18,50 +18,39 @@ def validUTF8(data):
     result = all(type(value) == int for value in data)
     if not result:
         return False
-    # Initialize a variable to keep track
-    # of the number of continuation bytes expected.
-    continuation_bytes = 0
+    bytes_to_expect = 0
 
-    # Iterate through the list of integers.
-    for integer in data:
+    # Iterate through the list of integers
+    for byte in data:
+        # Ensure only the 8 least
+        # significant bits are considered
+        byte &= 0xFF
 
-        # Check if the integer is within
-        # + the valid byte range (0 to 255).
-        if not 0 <= integer <= 255:
-            return False  # Invalid integer value.
-
-        # If we are not expecting any
-        # + continuation bytes, check the leading bits.
-        if continuation_bytes == 0:
-            if integer < 0x80:  # ASCII character (single-byte).
-                continue
-            elif integer >= 0xC0 and integer <= 0xFD:
-                # The leading bits indicate a multi-byte character.
-                # Count the number of leading
-                # + '1' bits to determine the number
-                # + of bytes in this character.
-                mask = 0x80
-                while (integer & mask):
-                    continuation_bytes += 1
-                    mask >>= 1
-
-                # The first byte of a multi-byte character
-                # + should have the correct number of leading '1' bits.
-                if continuation_bytes < 2 or continuation_bytes > 4:
-                    return False
-                # Decrement to account for this first byte.
-                continuation_bytes -= 1
+        # If we are not expecting any bytes,
+        # this should be the start of a new character
+        if bytes_to_expect == 0:
+            # Check the most significant bits to
+            # determine the number of bytes for the character
+            if byte & 0x80 == 0:
+                bytes_to_expect = 0
+            elif byte & 0xE0 == 0xC0:
+                bytes_to_expect = 1
+            elif byte & 0xF0 == 0xE0:
+                bytes_to_expect = 2
+            elif byte & 0xF8 == 0xF0:
+                bytes_to_expect = 3
             else:
-                return False  # Invalid leading bits.
-
+                # Invalid starting byte
+                return False
         else:
-            # Check that the current byte is a continuation byte.
-            if integer >= 0x80 and integer <= 0xBF:
-                continuation_bytes -= 1
+            # For bytes that are part of a multi-byte
+            # character, they should start with '10'
+            if byte & 0xC0 == 0x80:
+                bytes_to_expect -= 1
             else:
-                return False  # Invalid continuation byte.
+                # Invalid continuation byte
+                return False
 
-    # If there are still
-    # continuation bytes expected,
-    # the sequence is incomplete. returns false else True
-    return continuation_bytes == 0
+    # After processing all bytes, if bytes_to_expect
+    # is still nonzero, it's an incomplete character
+    return bytes_to_expect == 0
