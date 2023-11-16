@@ -1,11 +1,10 @@
 #!/usr/bin/python3
 """
-Module to for rotating 2D Matrix
+- Module to for rotating 2D Matrixi
+- Impements rotate_2d_matrix for clockwise
+    matrix rotation
 """
-from typing import List, Union
-
-
-def rotate_2d_matrix(matrix: List[List[Union[int, float, str]]]) -> None:
+def rotate_2d_matrix(matrix):
     """
     describe: function to rotate 2D matrix 90 degrees clockwise
         given an n x n 2D matrix
