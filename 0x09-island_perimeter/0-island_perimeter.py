@@ -4,7 +4,7 @@ Module for Island Perimeter
 """
 
 
-def island_perimeter(grid) -> int:
+def island_perimeter(grid):
     """
     description: function that computes the
         perimeter of the island described in grid
