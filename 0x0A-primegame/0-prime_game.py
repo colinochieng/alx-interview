@@ -53,51 +53,25 @@ def isWinner(x, nums) -> None:
         return prime_list
 
     # no game played
-    if x == 0:
+    if x <= 0:
         return None
 
-    mary = 0
+    maria = 0
     ben = 0
 
-    turn_track = 1
-
     for round in range(x):
-        try:
-            list_nums = [_ for _ in range(2, nums[round])]
+        prime_list = prime_generator(nums[round])
 
-            prime_list = prime_generator(nums[round])
+        num_primes = len(prime_list)
 
-            # if no prime current player wins and play continues
-            # here turn_track rep current player (No play made so
-            # no moving to the next)
-            if len(prime_list) == 0:
-                if turn_track % 2:
-                    mary += 1
-                else:
-                    ben += 1
-                continue
+        if num_primes % 2 == 0:
+            ben += 1
+        else:
+            maria += 1
 
-            for element in prime_list:
-                # remove prime divisors
-                list_nums = list(filter(lambda a: a % element, list_nums))
-
-                turn_track += 1
-
-            # check who has one the round
-            # subtract to get the winning player since here
-            # turn_track rep the next player
-            if (turn_track - 1) % 2:
-                mary += 1
-            else:
-                ben += 1
-
-        # wrong rounds count
-        except IndexError:
-            return None
-
-    if mary > ben:
-        return "Mary"
-    elif ben > mary:
+    if maria > ben:
+        return "Maria"
+    elif ben > maria:
         return "Ben"
     else:
-        None  # equal no win
+        return None
